@@ -11,9 +11,9 @@ namespace ScriptOnXaml
 {
     public class ScriptCommand : MarkupExtension, ICommand
     {
-        public ScriptCommand()
+        public ScriptCommand(string code)
         {
-
+            ScriptCode = code;
         }
 
         public event EventHandler CanExecuteChanged;

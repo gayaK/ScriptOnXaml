@@ -13,6 +13,10 @@ namespace ScriptOnXaml
 {
     public class ScriptConverter : MarkupExtension, IValueConverter
     {
+        public ScriptConverter(string code)
+        {
+            ScriptCode = code;
+        }
         private Task<ScriptRunner<object>> _compleTask;
 
         public string ScriptCode
