@@ -16,7 +16,7 @@ namespace ScriptOnXaml
         {
         }
 
-        private readonly ScriptActionArguments _args = new ScriptActionArguments();
+        private readonly Globals _globals = new Globals();
 
         private Task<ScriptRunner<object>> _compileTask;
 
@@ -37,7 +37,7 @@ namespace ScriptOnXaml
                     (d, e) =>
                     {
                         // スクリプトをコンパイルしてデリゲートを作成する。
-                        ((ScriptAction)d)._compileTask = ScriptCompiler.CompileAsync<ScriptActionArguments>((string)e.NewValue);
+                        ((ScriptAction)d)._compileTask = ScriptCompiler.CompileAsync<Globals>((string)e.NewValue);
                     }));
         #endregion
 
@@ -53,7 +53,7 @@ namespace ScriptOnXaml
                 "Arg1",
                 typeof(object),
                 typeof(ScriptAction),
-                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._args.Arg1 = e.NewValue));
+                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._globals.Arg1 = e.NewValue));
         #endregion
 
         #region Arg2
@@ -68,7 +68,7 @@ namespace ScriptOnXaml
                 "Arg2",
                 typeof(object),
                 typeof(ScriptAction),
-                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._args.Arg2 = e.NewValue));
+                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._globals.Arg2 = e.NewValue));
         #endregion
 
         #region Arg3
@@ -83,7 +83,7 @@ namespace ScriptOnXaml
                 "Arg3",
                 typeof(object),
                 typeof(ScriptAction),
-                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._args.Arg3 = e.NewValue));
+                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._globals.Arg3 = e.NewValue));
         #endregion
 
         #region Arg4
@@ -98,12 +98,12 @@ namespace ScriptOnXaml
                 "Arg4",
                 typeof(object),
                 typeof(ScriptAction),
-                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._args.Arg4 = e.NewValue));
+                new FrameworkPropertyMetadata(null, (d, e) => ((ScriptAction)d)._globals.Arg4 = e.NewValue));
         #endregion
 
         protected override void OnAttached()
         {
-            _args.Arg0 = AssociatedObject;
+            _globals.Arg0 = AssociatedObject;
 
             base.OnAttached();
         }
@@ -115,17 +115,16 @@ namespace ScriptOnXaml
                 return;
             }
             var runner = await _compileTask;
-            await runner(_args);
+            await runner(_globals);
+        }
+
+        public class Globals
+        {
+            public dynamic Arg0 { get; set; }
+            public dynamic Arg1 { get; set; }
+            public dynamic Arg2 { get; set; }
+            public dynamic Arg3 { get; set; }
+            public dynamic Arg4 { get; set; }
         }
     }
-
-    public class ScriptActionArguments
-    {
-        public dynamic Arg0 { get; set; }
-        public dynamic Arg1 { get; set; }
-        public dynamic Arg2 { get; set; }
-        public dynamic Arg3 { get; set; }
-        public dynamic Arg4 { get; set; }
-    }
-
 }

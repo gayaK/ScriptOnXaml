@@ -16,6 +16,7 @@ namespace ScriptOnXaml
 
             _options = ScriptOptions.Default
                 .AddReferences(domain.GetAssemblies())
+                .AddReferences(domain.Load("Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))
                 .AddImports("System")
                 .AddImports("System.Collections.Generic")
                 .AddImports("System.Linq")
@@ -41,10 +42,10 @@ namespace ScriptOnXaml
 
         private static ScriptOptions _options = ScriptOptions.Default;
 
-        public static Task<ScriptRunner<object>> CompileAsync<TGrobals>(string code)
+        public static Task<ScriptRunner<object>> CompileAsync<TGlobals>(string code)
         {
             return Task.Run(() => CSharpScript
-                .Create(code, _options, typeof(TGrobals))
+                .Create(code, _options, typeof(TGlobals))
                 .CreateDelegate());
         }
     }

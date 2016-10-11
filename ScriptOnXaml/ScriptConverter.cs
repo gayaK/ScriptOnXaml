@@ -13,8 +13,6 @@ namespace ScriptOnXaml
 {
     public class ScriptConverter : MarkupExtension, IValueConverter
     {
-        private readonly ScriptConverterArguments _args = new ScriptConverterArguments();
-
         private Task<ScriptRunner<object>> _compleTask;
 
         public string ScriptCode
@@ -28,7 +26,7 @@ namespace ScriptOnXaml
                 if (_scriptCode != value)
                 {
                     _scriptCode = value;
-                    _compleTask = ScriptCompiler.CompileAsync<ScriptConverterArguments>(value);
+                    _compleTask = ScriptCompiler.CompileAsync<Globals>(value);
                 }
             }
         }
@@ -36,10 +34,13 @@ namespace ScriptOnXaml
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            _args.Value = value;
-            _args.Prm = parameter;
+            var globals = new Globals
+            {
+                Value = value,
+                Prm = parameter,
+            };
             var runnter = _compleTask.Result;
-            var result = runnter(_args).Result;
+            var result = runnter(globals).Result;
             if (result ==null && targetType.IsClass)
             {
                 return null;
@@ -64,7 +65,7 @@ namespace ScriptOnXaml
             return this;
         }
 
-        public class ScriptConverterArguments
+        public class Globals
         {
             public dynamic Value { get; set; }
             public dynamic Prm { get; set; }

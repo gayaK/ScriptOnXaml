@@ -18,8 +18,6 @@ namespace ScriptOnXaml
 
         public event EventHandler CanExecuteChanged;
 
-        private readonly ScriptCommandArguments _args = new ScriptCommandArguments();
-
         private Task<ScriptRunner<object>> _compleTask;
 
         public string ScriptCode
@@ -33,7 +31,7 @@ namespace ScriptOnXaml
                 if (_scriptCode != value)
                 {
                     _scriptCode = value;
-                    _compleTask = ScriptCompiler.CompileAsync<ScriptCommandArguments>(value);
+                    _compleTask = ScriptCompiler.CompileAsync<Globals>(value);
                 }
             }
         }
@@ -46,9 +44,9 @@ namespace ScriptOnXaml
 
         public async void Execute(object parameter)
         {
-            _args.Prm = parameter;
+            var globals = new Globals { Prm = parameter };
             var runner = await _compleTask;
-            await runner(_args);
+            await runner(globals);
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -56,7 +54,7 @@ namespace ScriptOnXaml
             return this;
         }
 
-        public class ScriptCommandArguments
+        public class Globals
         {
             public dynamic Prm { get; set; }
         }

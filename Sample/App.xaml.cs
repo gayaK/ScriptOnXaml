@@ -12,5 +12,12 @@ namespace Sample
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            {
+                MessageBox.Show(e.ExceptionObject.ToString());
+            };
+        }
     }
 }
