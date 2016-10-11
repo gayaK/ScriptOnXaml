@@ -56,8 +56,9 @@
                         <scriptOnXaml:ScriptAction Arg1="{Binding ElementName=tbFirstName}"
                                                    Arg2="{Binding ElementName=tbFamilyName}">
                             <scriptOnXaml:ScriptAction.ScriptCode>
-                                using System.Windows;
                                 static int i = 0;
+                                Arg0.Content = string.Format("Clicked ({0})", ++i);
+                                
                                 if (string.IsNullOrWhiteSpace(Arg1.Text))
                                 {
                                     MessageBox.Show("Please enter your first name.");
@@ -72,8 +73,6 @@
                                 {
                                     MessageBox.Show(string.Format("Hello {0} {1}!!", Arg1.Text, Arg2.Text));                            
                                 }
-                            
-                                Arg0.Content = string.Format("Clicked ({0})", ++i);
                             </scriptOnXaml:ScriptAction.ScriptCode>
                         </scriptOnXaml:ScriptAction>
                     </i:EventTrigger>
@@ -85,8 +84,8 @@
                     VerticalAlignment="Top"
                     Margin="10"
                     Content="Maximize"
-                    IsEnabled="{Binding ElementName=wnd, Path=WindowState, Converter={scriptOnXaml:ScriptConverter ScriptCode='Value != System.Windows.WindowState.Maximized'}}"
-                    Command="{scriptOnXaml:ScriptCommand ScriptCode='Prm.WindowState = System.Windows.WindowState.Maximized;'}"
+                    IsEnabled="{Binding ElementName=wnd, Path=WindowState, Converter={scriptOnXaml:ScriptConverter ScriptCode='Value != WindowState.Maximized'}}"
+                    Command="{scriptOnXaml:ScriptCommand ScriptCode='Prm.WindowState = WindowState.Maximized;'}"
                     CommandParameter="{Binding ElementName=wnd}" />
         </StackPanel>
     </Grid>
